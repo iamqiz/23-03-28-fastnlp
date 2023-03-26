@@ -334,6 +334,7 @@ def _get_arg_list(func):
 
 
 # check args
+# qz,args:[预测dict提供的参数, target dict提供的参数]
 def _check_arg_dict_list(func, args):
     if isinstance(args, dict):
         arg_dict_list = [args]

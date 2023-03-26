@@ -253,6 +253,7 @@ class MetricBase(object):
             self._reverse_param_map = {input_arg: func_arg for func_arg, input_arg in self._param_map.items()}
 
         # need to wrap inputs in dict.
+        # qz,这两个dict表示pred和target两个dict中提供的用于参数映射的键和对应的值
         mapped_pred_dict = {}
         mapped_target_dict = {}
         for input_arg, mapped_arg in self._reverse_param_map.items():
@@ -263,6 +264,7 @@ class MetricBase(object):
 
         # missing
         if not self._checked:
+            # qz,重复,即映射到的键同时存在于pred和target两个dict里,无法确定从哪个获取,因此是个
             duplicated = []
             for input_arg, mapped_arg in self._reverse_param_map.items():
                 if input_arg in pred_dict and input_arg in target_dict:
