@@ -292,7 +292,7 @@ class MetricBase(object):
                 raise _CheckError(check_res=check_res,
                                   func_signature=_get_func_signature(self.evaluate))
             self._checked = True
-        # qz,
+        # qz,提取函数需要的参数
         refined_args = _build_args(self.evaluate, **mapped_pred_dict, **mapped_target_dict)
 
         self.evaluate(**refined_args)
