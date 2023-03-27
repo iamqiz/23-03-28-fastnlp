@@ -269,6 +269,7 @@ class MetricBase(object):
             for input_arg, mapped_arg in self._reverse_param_map.items():
                 if input_arg in pred_dict and input_arg in target_dict:
                     duplicated.append(input_arg)
+            # qz,检查参数缺失/重复/未使用 的情况
             check_res = _check_arg_dict_list(self.evaluate, [mapped_pred_dict, mapped_target_dict])
             # only check missing.
             # replace missing.
@@ -286,10 +287,12 @@ class MetricBase(object):
                                   all_needed=check_res.all_needed,
                                   varargs=check_res.varargs)
 
+            # qz,缺失和重复都会报错
             if check_res.missing or check_res.duplicated:
                 raise _CheckError(check_res=check_res,
                                   func_signature=_get_func_signature(self.evaluate))
             self._checked = True
+        # qz,
         refined_args = _build_args(self.evaluate, **mapped_pred_dict, **mapped_target_dict)
 
         self.evaluate(**refined_args)

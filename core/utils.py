@@ -297,7 +297,9 @@ def _build_args(func, **kwargs):
     if spect.defaults is not None:
         defaults = [arg for arg in spect.defaults]
     start_idx = len(spect.args) - len(defaults)
+    # qz,带默认值的参数
     output = {name: default for name, default in zip(spect.args[start_idx:], defaults)}
+    # qz,从kwargs里提取函数需要的参数,并覆盖默认
     output.update({name: val for name, val in kwargs.items() if name in needed_args})
     return output
 
@@ -349,13 +351,17 @@ def _check_arg_dict_list(func, args):
         defaults = [arg for arg in spect.defaults]
     start_idx = len(spect.args) - len(defaults)
     default_args = set(spect.args[start_idx:])
+    # qz,没有默认值的参数
     require_args = all_args - default_args
     input_arg_count = Counter()
     for arg_dict in arg_dict_list:
         input_arg_count.update(arg_dict.keys())
+    # qz,同时出现在pred和target dict中的参数
     duplicated = [name for name, val in input_arg_count.items() if val > 1]
     input_args = set(input_arg_count.keys())
+    # qz,eval函数要求提供,但是pred和target dict中都没有的参数
     missing = list(require_args - input_args)
+    # qz,pred和target dict提供了,但是没被用到的参数
     unused = list(input_args - all_args)
     varargs = [] if not spect.varargs else [spect.varargs]
     return _CheckRes(missing=missing,
